@@ -42,7 +42,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="间隔时间重置，ALARM重启"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
                     android:id="@+id/btn_reset"
                     />
 
@@ -65,7 +64,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="应用自身停止当前ALARM"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
                     android:id="@+id/stop"
                     />
 
@@ -73,7 +71,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="查询系统返回Alarm状态列表"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
                     android:id="@+id/showlist"
                     />
 
@@ -88,7 +85,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="更新系统Alarm接口，禁用该包名Alarm"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
                     android:id="@+id/updatelist"
                     />
 
@@ -96,7 +92,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="更新系统Alarm接口，启用该包名Alarm"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
                     android:id="@+id/enablelist"
                     />
 

@@ -1,22 +1,31 @@
 package com.lenovo.powertester.app;
 
 import android.app.Activity;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.content.Context;
-import android.os.Build;
-import android.os.Bundle;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
-import android.widget.ArrayAdapter;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
+import android.view.*;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.Optional;
+import com.lenovo.powertester.app.alarm.AbnormalInfo;
+import com.lenovo.powertester.app.alarm.AlarmManagerAdapter;
+import com.lenovo.powertester.app.alarm.RepeatingAlarm;
+
+import java.util.Arrays;
+import java.util.HashMap;
 
 
 public class MainActivity extends ActionBarActivity
@@ -59,7 +68,7 @@ public class MainActivity extends ActionBarActivity
     public void onSectionAttached(int number) {
         switch (number) {
             case 1:
-                mTitle = getString(R.string.title_section1);
+                mTitle = getString(R.string.title_alarm);
                 break;
             case 2:
                 mTitle = getString(R.string.title_section2);
@@ -106,7 +115,8 @@ public class MainActivity extends ActionBarActivity
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment {
+    public static class PlaceholderFragment extends Fragment implements View.OnClickListener {
+        private int currentid;
         /**
          * The fragment argument representing the section number for this
          * fragment.
@@ -128,18 +138,165 @@ public class MainActivity extends ActionBarActivity
         public PlaceholderFragment() {
         }
 
+
+        @Optional
+        @InjectView(R.id.edit_interval)
+        EditText edit_interval;
+        @Optional
+        @InjectView(R.id.btn_reset)
+        Button btn_reset;
+        @Optional
+        @InjectView(R.id.showlist)
+        Button showlist;
+        @Optional
+        @InjectView(R.id.updatelist)
+        Button updatelist;
+        @Optional
+        @InjectView(R.id.interval_show)
+        TextView interval_show;
+        @Optional
+        @InjectView(R.id.history)
+        TextView history;
+        @Optional
+        @InjectView(R.id.alarmlog)
+        TextView alarmlog;
+        @Optional
+        @InjectView(R.id.stop)
+        Button stop;
+
+
+        private int interval;
+
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+                                 Bundle savedInstanceState) {
+            View rootView;
+            switch (currentid) {
+                case 1:
+                    rootView = inflater.inflate(R.layout.fragment_main, container, false);
+                    break;
+                case 2:
+                    rootView = inflater.inflate(R.layout.fragment_main_2, container, false);
+                    break;
+                case 3:
+                    rootView = inflater.inflate(R.layout.fragment_main_3, container, false);
+                    break;
+                default:
+                    rootView = inflater.inflate(R.layout.fragment_main, container, false);
+                    break;
+
+            }
+            Log.i("Mytester", "onCreateView()");
+            ButterKnife.inject(this, rootView);
+            switch (currentid) {
+                case 1:
+                    initAlarmEvent();
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+                default:
+                    break;
+            }
             return rootView;
+        }
+
+        private PendingIntent sender;
+        private AlarmManager am;
+        private AlarmManagerAdapter managerAdapter;
+        private StringBuffer appendhistory;
+        private Toast mToast;
+
+        private void initAlarmEvent() {
+            Intent intent = new Intent(getActivity(), RepeatingAlarm.class);
+            am = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
+            sender = PendingIntent.getBroadcast(getActivity(), 0,
+                    intent, 0);
+            edit_interval.setOnClickListener(this);
+            btn_reset.setOnClickListener(this);
+            showlist.setOnClickListener(this);
+            updatelist.setOnClickListener(this);
+            stop.setOnClickListener(this);
+            managerAdapter = new AlarmManagerAdapter((AlarmManager) getActivity().getSystemService(ALARM_SERVICE), getActivity());
+            clear();
+        }
+
+        private void clear() {
+            if (am != null && sender != null) {
+                am.cancel(sender);
+            }
+        }
+
+        private void repeat(int interval) {
+
+            long firstTime = SystemClock.elapsedRealtime();
+
+            am.setRepeating(AlarmManager.RTC_WAKEUP, firstTime, interval * 1000, sender);
+            if (mToast != null) {
+                mToast.cancel();
+            }
+            mToast = Toast.makeText(getActivity(), "repeating_scheduled",
+                    Toast.LENGTH_LONG);
+            mToast.show();
+        }
+
+        @Override
+        public void onDestroyView() {
+            super.onDestroyView();
+            ButterKnife.reset(this);
         }
 
         @Override
         public void onAttach(Activity activity) {
             super.onAttach(activity);
-            ((MainActivity) activity).onSectionAttached(
-                    getArguments().getInt(ARG_SECTION_NUMBER));
+            currentid = getArguments().getInt(ARG_SECTION_NUMBER);
+            ((MainActivity) activity).onSectionAttached(currentid);
+            Log.i("Mytester", "onAttach()");
+
+        }
+
+
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()) {
+                case R.id.btn_reset:
+                    if (!(edit_interval.getText().toString()).equals("")) {
+                        interval = Integer.parseInt(edit_interval.getText().toString());
+                        interval_show.setText(interval + "秒");
+                        clear();
+                        repeat(interval);
+                    }
+                    break;
+                case R.id.stop:
+                    clear();
+                    break;
+
+                case R.id.showlist:
+                    updateTextView(managerAdapter.getAlarmStatus());
+                    break;
+                case R.id.updatelist:
+                    HashMap<String, Integer> map = new HashMap<String, Integer>();
+                    map.put("com.example.myapp5", AlarmManagerAdapter.POLICY_FORBIDDEN);
+                    managerAdapter.updateAlarmList(map);
+                    updateTextView(managerAdapter.getAlarmStatus());
+                    break;
+                case R.id.enablelist:
+                    HashMap<String, Integer> map2 = new HashMap<String, Integer>();
+                    map2.put("com.example.myapp5", AlarmManagerAdapter.POLICY_TRUSTED);
+                    managerAdapter.updateAlarmList(map2);
+                    updateTextView(managerAdapter.getAlarmStatus());
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void updateTextView(HashMap<String, AbnormalInfo> alarmStatus) {
+            if (alarmStatus == null) {
+                return;
+            }
+            alarmlog.setText(Arrays.toString(alarmStatus.entrySet().toArray()));
         }
     }
 
