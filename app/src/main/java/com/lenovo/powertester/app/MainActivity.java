@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.*;
 import android.widget.Button;
@@ -19,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import butterknife.Optional;
 import com.lenovo.powertester.app.alarm.AbnormalInfo;
 import com.lenovo.powertester.app.alarm.AlarmManagerAdapter;
@@ -41,11 +44,13 @@ public class MainActivity extends ActionBarActivity
      */
     private CharSequence mTitle;
 
+    private static TelephonyManager tm;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
@@ -71,7 +76,7 @@ public class MainActivity extends ActionBarActivity
                 mTitle = getString(R.string.title_alarm);
                 break;
             case 2:
-                mTitle = getString(R.string.title_section2);
+                mTitle = getString(R.string.info);
                 break;
             case 3:
                 mTitle = getString(R.string.title_section3);
@@ -115,7 +120,7 @@ public class MainActivity extends ActionBarActivity
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment implements View.OnClickListener {
+    public static class PlaceholderFragment extends Fragment {
         private int currentid;
         /**
          * The fragment argument representing the section number for this
@@ -142,24 +147,35 @@ public class MainActivity extends ActionBarActivity
         @Optional
         @InjectView(R.id.edit_interval)
         EditText edit_interval;
+
         @Optional
         @InjectView(R.id.btn_reset)
         Button btn_reset;
+
         @Optional
         @InjectView(R.id.showlist)
         Button showlist;
+
         @Optional
         @InjectView(R.id.updatelist)
         Button updatelist;
+
+        public void updatelist() {
+
+        }
+
         @Optional
         @InjectView(R.id.interval_show)
         TextView interval_show;
+
         @Optional
         @InjectView(R.id.history)
         TextView history;
+
         @Optional
         @InjectView(R.id.alarmlog)
         TextView alarmlog;
+
         @Optional
         @InjectView(R.id.stop)
         Button stop;
@@ -167,22 +183,40 @@ public class MainActivity extends ActionBarActivity
 
         private int interval;
 
+
+        @Optional
+        @InjectView(R.id.systemverison)
+        TextView systemverison;
+        @Optional
+        @InjectView(R.id.androidid)
+        TextView androidid;
+        @Optional
+        @InjectView(R.id.systemmodel)
+        TextView systemmodel;
+//        @Optional
+//        @InjectView(R.id.section_label)
+//        TextView section_label;
+
+
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView;
             switch (currentid) {
                 case 1:
-                    rootView = inflater.inflate(R.layout.fragment_main, container, false);
+                    rootView = inflater.inflate(R.layout.fragment_alarm, container, false);
                     break;
                 case 2:
-                    rootView = inflater.inflate(R.layout.fragment_main_2, container, false);
+                    rootView = inflater.inflate(R.layout.fragment_systeminfo, container, false);
                     break;
                 case 3:
-                    rootView = inflater.inflate(R.layout.fragment_main_3, container, false);
+                    rootView = inflater.inflate(R.layout.fragment_wakelock, container, false);
+                    break;
+                case 4:
+                    rootView = inflater.inflate(R.layout.fragment_alarm, container, false);
                     break;
                 default:
-                    rootView = inflater.inflate(R.layout.fragment_main, container, false);
+                    rootView = inflater.inflate(R.layout.fragment_alarm, container, false);
                     break;
 
             }
@@ -193,6 +227,7 @@ public class MainActivity extends ActionBarActivity
                     initAlarmEvent();
                     break;
                 case 2:
+                    initSystemInfo();
                     break;
                 case 3:
                     break;
@@ -200,6 +235,13 @@ public class MainActivity extends ActionBarActivity
                     break;
             }
             return rootView;
+        }
+
+        private void initSystemInfo() {
+
+            systemverison.setText(Build.DISPLAY + "");
+            androidid.setText(Build.VERSION.SDK_INT + "");
+            systemmodel.setText(android.os.Build.MODEL);
         }
 
         private PendingIntent sender;
@@ -213,11 +255,6 @@ public class MainActivity extends ActionBarActivity
             am = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
             sender = PendingIntent.getBroadcast(getActivity(), 0,
                     intent, 0);
-            edit_interval.setOnClickListener(this);
-            btn_reset.setOnClickListener(this);
-            showlist.setOnClickListener(this);
-            updatelist.setOnClickListener(this);
-            stop.setOnClickListener(this);
             managerAdapter = new AlarmManagerAdapter((AlarmManager) getActivity().getSystemService(ALARM_SERVICE), getActivity());
             clear();
         }
@@ -257,7 +294,8 @@ public class MainActivity extends ActionBarActivity
         }
 
 
-        @Override
+        @Optional
+        @OnClick({R.id.btn_reset, R.id.stop, R.id.showlist, R.id.updatelist, R.id.enablelist})
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.btn_reset:
