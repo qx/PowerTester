@@ -30,7 +30,7 @@ public class RepeatingAlarm extends BroadcastReceiver {
         ioOperationForTest();
 
         System.out.println("****repeat");
-        MyData.getInstance().stringBuffer.append("repeat<" + getNow4AlarmCheck() + ">");
+        MyData.getInstance().stringBuffer.append("repeat<" + getNow4AlarmCheck() + ">"+"\n");
     }
 
     public static void excu(Runnable runnable) {

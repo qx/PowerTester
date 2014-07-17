@@ -4,10 +4,17 @@
     <string name="app_name">PowerTester</string>
     <string name="title_alarm">Alarm测试</string>
     <string name="info">系统及省电信息</string>
-    <string name="title_section3">Section 3</string>
+    <string name="title_section3">智能屏幕曲线</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>
     <string name="action_settings">Settings</string>
-    <string name="alarm_explain">测试说明\n </string>
+    <string name="alarm_explain">测试说明\n
+    1.间隔时间重置:设置alarm的间隔周期,启动Alarm,并清空上一次数据,以5分钟为宜\n
+    2.应用自身停止当前alarm:取消设置的Alarm\n
+    3.查询系统返回Alarm状态列表:查询系统Alarm记录\n
+    4.禁用Alarm接口:调用系统禁用功能\n
+    5.启用Alarm接口:取消系统禁用功能\n
+    ------------------------------------------------------\n
+    </string>
 </resources>

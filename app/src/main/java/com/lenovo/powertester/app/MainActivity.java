@@ -25,6 +25,7 @@ import butterknife.OnClick;
 import butterknife.Optional;
 import com.lenovo.powertester.app.alarm.AbnormalInfo;
 import com.lenovo.powertester.app.alarm.AlarmManagerAdapter;
+import com.lenovo.powertester.app.alarm.MyData;
 import com.lenovo.powertester.app.alarm.RepeatingAlarm;
 
 import java.util.Arrays;
@@ -293,6 +294,15 @@ public class MainActivity extends ActionBarActivity
 
         }
 
+        @Override
+        public void onResume() {
+            super.onResume();
+            appendhistory = MyData.getInstance().stringBuffer;
+            if (history != null && appendhistory != null && appendhistory.length() > 1) {
+
+                history.setText(appendhistory.toString());
+            }
+        }
 
         @Optional
         @OnClick({R.id.btn_reset, R.id.stop, R.id.showlist, R.id.updatelist, R.id.enablelist})
