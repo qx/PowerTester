@@ -20,6 +20,7 @@ import java.util.concurrent.Executors;
 public class RepeatingAlarm extends BroadcastReceiver {
     private StringBuffer str;
     private Context mContext;
+
     @Override
     public void onReceive(Context context, Intent intent) {
         str = new StringBuffer();
@@ -30,7 +31,7 @@ public class RepeatingAlarm extends BroadcastReceiver {
         ioOperationForTest();
 
         System.out.println("****repeat");
-        MyData.getInstance().stringBuffer.append("repeat<" + getNow4AlarmCheck() + ">"+"\n");
+        MyData.getInstance().stringBuffer.append("repeat<" + getNow4AlarmCheck() + ">" + "\n");
     }
 
     public static void excu(Runnable runnable) {
@@ -68,7 +69,7 @@ public class RepeatingAlarm extends BroadcastReceiver {
             File directory = new File(sdCard.getAbsolutePath()
                     + "/MyFiles");
             directory.mkdirs();
-            System.out.println("path"+directory.getPath());
+            System.out.println("path" + directory.getPath());
             File file = new File(directory, "textfile.txt");
             FileOutputStream fOut = new FileOutputStream(file);
             OutputStreamWriter osw = new OutputStreamWriter(fOut);

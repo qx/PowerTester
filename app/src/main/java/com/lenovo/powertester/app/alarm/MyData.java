@@ -11,6 +11,7 @@ public class MyData {
     }
 
     public StringBuffer stringBuffer;
+
     private MyData() {
         stringBuffer = new StringBuffer();
     }

@@ -20,9 +20,9 @@ public class AbnormalInfo {
         if (anInts.length == 2) {
             return
                     "\n包名 =" + appNameFromPkgName +
-                    "\n" + "类型 RTCWAKEUP:" + anInts[0] +
-                    "\n" + "类型 ELAPSED_REALTIME_WAKEUP:" + anInts[1] +
-                    "\n";
+                            "\n" + "类型 RTCWAKEUP:" + anInts[0] +
+                            "\n" + "类型 ELAPSED_REALTIME_WAKEUP:" + anInts[1] +
+                            "\n";
 
         } else {
             return "\n" + "\n包名 =" + appNameFromPkgName +
