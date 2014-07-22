@@ -33,8 +33,10 @@
 
     <string name="app_name">PowerTester</string>
     <string name="title_alarm">Alarm测试</string>
-    <string name="info">系统及省电信息</string>
+    <string name="info">系统信息</string>
     <string name="title_section3">智能屏幕曲线</string>
+    <string name="title_wakelock">Wakelock</string>
+    <string name="title_appinfo">应用信息</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>

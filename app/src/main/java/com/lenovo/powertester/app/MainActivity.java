@@ -24,6 +24,8 @@ import com.lenovo.powertester.app.alarm.AbnormalInfo;
 import com.lenovo.powertester.app.alarm.AlarmManagerAdapter;
 import com.lenovo.powertester.app.alarm.MyData;
 import com.lenovo.powertester.app.alarm.RepeatingAlarm;
+import com.lenovo.powertester.app.infos.Infos;
+import com.lenovo.powertester.app.wakelock.PowerManagerInvacation;
 import org.achartengine.ChartFactory;
 import org.achartengine.GraphicalView;
 import org.achartengine.chart.PointStyle;
@@ -88,6 +90,12 @@ public class MainActivity extends ActionBarActivity
                 break;
             case 3:
                 mTitle = getString(R.string.title_section3);
+                break;
+            case 4:
+                mTitle = getString(R.string.title_wakelock);
+                break;
+            case 5:
+                mTitle = getString(R.string.title_appinfo);
                 break;
         }
     }
@@ -212,6 +220,13 @@ public class MainActivity extends ActionBarActivity
         @InjectView(R.id.linearlayout)
         LinearLayout linearlayout;
 
+        @Optional
+        @InjectView(R.id.text_wakelock)
+        TextView text_wakelock;
+        @Optional
+        @InjectView(R.id.lesafelist)
+        TextView lesafelist;
+
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
@@ -227,7 +242,10 @@ public class MainActivity extends ActionBarActivity
                     rootView = inflater.inflate(R.layout.fragment_smartscreen, container, false);
                     break;
                 case 4:
-                    rootView = inflater.inflate(R.layout.fragment_alarm, container, false);
+                    rootView = inflater.inflate(R.layout.fragment_wakelock, container, false);
+                    break;
+                case 5:
+                    rootView = inflater.inflate(R.layout.fragment_appinfo, container, false);
                     break;
                 default:
                     rootView = inflater.inflate(R.layout.fragment_alarm, container, false);
@@ -247,10 +265,21 @@ public class MainActivity extends ActionBarActivity
                     linearlayout = (LinearLayout) rootView.findViewById(R.id.linearlayout);
                     listenBrightness();
                     break;
+                case 4:
+                    text_wakelock.setText(getWakelockInfo());
+                    break;
+                case 5:
+                    lesafelist.setText(Infos.getSafeWhiteList(getActivity()).toString());
+                    break;
                 default:
                     break;
             }
             return rootView;
+        }
+
+        private String getWakelockInfo() {
+            Set<String> hs = PowerManagerInvacation.getWakelockApps(getActivity());
+            return hs.toString();
         }
 
         private void listenBrightness() {
@@ -551,8 +580,9 @@ public class MainActivity extends ActionBarActivity
             renderer.setXLabelsColor(Color.BLACK);
             renderer.setYLabelsColor(0, Color.BLACK);
             renderer.setShowLegend(false);
-            renderer.setMargins(new int[]{20, 30, 100, 0});
+            renderer.setMargins(new int[]{20, 30, 20, 0});
             XYSeriesRenderer r = new XYSeriesRenderer();
+
             r.setColor(Color.BLUE);
             r.setChartValuesTextSize(15);
             r.setChartValuesSpacing(3);
