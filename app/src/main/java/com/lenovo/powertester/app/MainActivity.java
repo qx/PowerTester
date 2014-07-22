@@ -226,6 +226,9 @@ public class MainActivity extends ActionBarActivity
         @Optional
         @InjectView(R.id.lesafelist)
         TextView lesafelist;
+        @Optional
+        @InjectView(R.id.systeminfo)
+        TextView systeminfo;
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -254,26 +257,7 @@ public class MainActivity extends ActionBarActivity
             }
             Log.i("Mytester", "onCreateView()");
             ButterKnife.inject(this, rootView);
-            switch (currentid) {
-                case 1:
-                    initAlarmEvent();
-                    break;
-                case 2:
-                    initSystemInfo();
-                    break;
-                case 3:
-                    linearlayout = (LinearLayout) rootView.findViewById(R.id.linearlayout);
-                    listenBrightness();
-                    break;
-                case 4:
-                    text_wakelock.setText(getWakelockInfo());
-                    break;
-                case 5:
-                    lesafelist.setText(Infos.getSafeWhiteList(getActivity()).toString());
-                    break;
-                default:
-                    break;
-            }
+
             return rootView;
         }
 
@@ -283,19 +267,6 @@ public class MainActivity extends ActionBarActivity
         }
 
         private void listenBrightness() {
-//            ContentObserver mBrightnessObserver = new ContentObserver(new Handler()) {
-//                @Override
-//                public void onChange(boolean selfChange) {
-//                    //
-//                    Log.i("BRIGHTNESS", "selfChange" + selfChange);
-//                }
-//            };
-//            getActivity().getContentResolver().registerContentObserver(
-//                    Settings.System.getUriFor(Settings.System.SCREEN_BRIGHTNESS), true,
-//                    mBrightnessObserver);
-
-
-            // Settings.System.SCREEN_BRIGHTNESS, 0);
             timerTask = new TimerTask() {
                 @Override
                 public void run() {
@@ -441,6 +412,88 @@ public class MainActivity extends ActionBarActivity
         @Override
         public void onResume() {
             super.onResume();
+            switch (currentid) {
+                case 1:
+                    AsyncTaskThreadPoolExecutorHelper.execute(new AsyncTask<Object, Object, Object>() {
+                        @Override
+                        protected Object doInBackground(Object... objects) {
+                            return null;
+                        }
+
+                        @Override
+                        protected void onPostExecute(Object o) {
+                            super.onPostExecute(o);
+                            initAlarmEvent();
+                        }
+                    });
+                    break;
+                case 2:
+                    AsyncTaskThreadPoolExecutorHelper.execute(new AsyncTask<Object, Object, Object>() {
+                        @Override
+                        protected Object doInBackground(Object... objects) {
+                            return null;
+                        }
+
+                        @Override
+                        protected void onPostExecute(Object o) {
+                            initSystemInfo();
+                        }
+                    });
+                    break;
+                case 3:
+                    AsyncTaskThreadPoolExecutorHelper.execute(new AsyncTask<Object, Object, Object>() {
+                        @Override
+                        protected Object doInBackground(Object... objects) {
+                            return null;
+                        }
+
+                        @Override
+                        protected void onPostExecute(Object o) {
+                            listenBrightness();
+                            super.onPostExecute(o);
+                        }
+                    });
+                    break;
+                case 4:
+                    AsyncTaskThreadPoolExecutorHelper.execute(new AsyncTask<Object, Object, Object>() {
+                        String wakelockinfo = "";
+
+                        @Override
+                        protected Object doInBackground(Object... objects) {
+                            wakelockinfo = getWakelockInfo();
+                            return null;
+                        }
+
+                        @Override
+                        protected void onPostExecute(Object o) {
+                            super.onPostExecute(o);
+                            text_wakelock.setText(wakelockinfo);
+                        }
+                    });
+                    break;
+                case 5:
+                    AsyncTaskThreadPoolExecutorHelper.execute(new AsyncTask<Object, Object, Object>() {
+                        String sysinfo = "";
+                        String leinfo = "";
+
+                        @Override
+                        protected Object doInBackground(Object... objects) {
+                            sysinfo = Infos.getSystemApp(getActivity()).toString();
+                            leinfo = Infos.getSafeWhiteList(getActivity()).toString();
+                            return null;
+                        }
+
+                        @Override
+                        protected void onPostExecute(Object o) {
+                            systeminfo.setText(sysinfo);
+                            lesafelist.setText(leinfo);
+                            super.onPostExecute(o);
+                        }
+                    });
+                    break;
+                default:
+                    break;
+            }
             appendhistory = MyData.getInstance().stringBuffer;
             if (history != null && appendhistory != null && appendhistory.length() > 1) {
 

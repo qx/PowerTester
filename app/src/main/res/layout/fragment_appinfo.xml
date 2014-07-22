@@ -29,8 +29,13 @@
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="---------------------------------------------------"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="乐安全白名单:"/>
     <TextView
+            android:textColor="@android:color/holo_green_light"
             android:id="@+id/lesafelist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>

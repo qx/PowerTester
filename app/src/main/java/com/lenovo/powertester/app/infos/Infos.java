@@ -3,14 +3,19 @@ package com.lenovo.powertester.app.infos;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.RemoteException;
 import android.util.Log;
+import com.lenovo.powertester.app.wakelock.PackageDetector;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -48,7 +53,7 @@ public class Infos {
 
                 while (cursor.moveToNext()) {
                     String pkg = cursor.getString(cursor.getColumnIndex(DB_COLUMN_PKGNAME));
-                    whiteList.put(pkg, getAppName(context,pkg));
+                    whiteList.put(pkg, getAppName(context, pkg));
                 }
 
                 return whiteList;
@@ -75,4 +80,29 @@ public class Infos {
         }
     }
 
+    public static Map<String, String> getSystemApp(Context context) {
+        if (context == null) {
+            throw new IllegalArgumentException();
+        }
+        Map<String, String> whiteList = new HashMap<String, String>();
+//        List<String> appsInLauncher = new ArrayList<String>();
+        Intent it = new Intent(Intent.ACTION_MAIN);
+        it.addCategory(Intent.CATEGORY_LAUNCHER);
+//        List<ResolveInfo> list = context.getPackageManager().queryIntentActivities(it, 0);
+//        for (ResolveInfo f : list) {
+//            appsInLauncher.add(f.activityInfo.packageName);
+//        }
+        PackageManager pkgManager = context.getPackageManager();
+        List<ApplicationInfo> installedApps = pkgManager.getInstalledApplications(0);
+        for (ApplicationInfo appInfo : installedApps) {
+            boolean isSystemApp = ((appInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0);
+            if (PackageDetector.isPkgDisabled(context, appInfo.packageName)) {
+                continue;
+            }
+            if (isSystemApp) {
+                whiteList.put(appInfo.packageName, getAppName(context, appInfo.packageName));
+            }
+        }
+        return whiteList;
+    }
 }
