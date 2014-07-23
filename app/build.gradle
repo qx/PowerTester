@@ -15,7 +15,9 @@ repositories {
 android {
     compileSdkVersion 19
     buildToolsVersion "19.0.3"
-
+    lintOptions {
+        abortOnError false
+    }
     defaultConfig {
         minSdkVersion 8
         targetSdkVersion 19
@@ -29,17 +31,6 @@ android {
         }
     }
 }
-//<repository>
-//<id>achartengine</id>
-//  <name>Public AChartEngine repository</name>
-//<url>https://repository-achartengine.forge.cloudbees.com/snapshot/</url>
-//</repository>
-//
-//<dependency>
-//  <groupId>org.achartengine</groupId>
-//<artifactId>achartengine</artifactId>
-//  <version>1.2.0</version>
-//</dependency>
 repositories {
     mavenCentral()
     maven {

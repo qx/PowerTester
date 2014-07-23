@@ -263,6 +263,7 @@ public class MainActivity extends ActionBarActivity
 
         private String getWakelockInfo() {
             Set<String> hs = PowerManagerInvacation.getWakelockApps(getActivity());
+            Log.d("mywakelock", hs.toString());
             return hs.toString();
         }
 
@@ -457,7 +458,7 @@ public class MainActivity extends ActionBarActivity
                 case 4:
                     AsyncTaskThreadPoolExecutorHelper.execute(new AsyncTask<Object, Object, Object>() {
                         String wakelockinfo = "";
-
+//adb logcat -s "mywakelock"
                         @Override
                         protected Object doInBackground(Object... objects) {
                             wakelockinfo = getWakelockInfo();

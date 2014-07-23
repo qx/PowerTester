@@ -6,6 +6,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.util.Log;
+import com.lenovo.powertester.app.root.RootTools;
 
 import java.io.*;
 import java.util.*;
@@ -15,9 +16,11 @@ import java.util.*;
  */
 public class PowerManagerInvacation {
 
-    private static final String TAG = "POWERTESTER";
+    private static final String TAG = "mywakelock";
 
     public static Set<String> getWakelockApps(Context context) {
+        RootTools.dumpWakelockDetail(context);
+
         Set<String> mSet = new HashSet<String>();
         final String keyUid = "uid=";
         final String keyTag = "tag=";
