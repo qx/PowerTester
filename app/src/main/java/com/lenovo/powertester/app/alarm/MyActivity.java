@@ -101,13 +101,13 @@ public class MyActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.updatelist:
                 HashMap<String, Integer> map = new HashMap<String, Integer>();
-                map.put("com.example.myapp5", AlarmManagerAdapter.POLICY_FORBIDDEN);
+                map.put("com.lenovo.powertester.app", AlarmManagerAdapter.POLICY_FORBIDDEN);
                 managerAdapter.updateAlarmList(map);
                 updateTextView(managerAdapter.getAlarmStatus());
                 break;
             case R.id.enablelist:
                 HashMap<String, Integer> map2 = new HashMap<String, Integer>();
-                map2.put("com.example.myapp5", AlarmManagerAdapter.POLICY_TRUSTED);
+                map2.put("com.lenovo.powertester.app", AlarmManagerAdapter.POLICY_TRUSTED);
                 managerAdapter.updateAlarmList(map2);
                 updateTextView(managerAdapter.getAlarmStatus());
                 break;

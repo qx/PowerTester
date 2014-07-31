@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Environment;
 import android.widget.Toast;
+import com.lenovo.powertester.app.MainActivity;
 import com.lenovo.powertester.app.R;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 import org.apache.commons.lang3.time.FastDateFormat;
@@ -20,6 +21,7 @@ import java.util.concurrent.Executors;
 public class RepeatingAlarm extends BroadcastReceiver {
     private StringBuffer str;
     private Context mContext;
+    private MainActivity.PlaceholderFragment AlarmInfo;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -31,7 +33,7 @@ public class RepeatingAlarm extends BroadcastReceiver {
         ioOperationForTest();
 
         System.out.println("****repeat");
-        MyData.getInstance().stringBuffer.append("repeat<" + getNow4AlarmCheck() + ">" + "\n");
+        MyData.getInstance().stringBuffer.append("repeat<" + getNow4AlarmCheck() + ">"+"| AlarmType:"+ AbnormalInfo.ALARMTYPE + "\n");
     }
 
     public static void excu(Runnable runnable) {

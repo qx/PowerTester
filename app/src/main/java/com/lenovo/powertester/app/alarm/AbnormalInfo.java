@@ -1,11 +1,14 @@
 package com.lenovo.powertester.app.alarm;
 
+import android.app.AlarmManager;
+
 import java.util.Arrays;
 
 /**
  * Created by Administrator on 2014/5/15.
  */
 public class AbnormalInfo {
+    public static final int ALARMTYPE = AlarmManager.ELAPSED_REALTIME;
     private String appNameFromPkgName;
     private int[] anInts;
 

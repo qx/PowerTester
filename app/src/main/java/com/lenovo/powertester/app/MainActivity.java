@@ -168,13 +168,13 @@ public class MainActivity extends ActionBarActivity
         @InjectView(R.id.btn_reset)
         Button btn_reset;
 
-        @Optional
-        @InjectView(R.id.showlist)
-        Button showlist;
-
-        @Optional
-        @InjectView(R.id.updatelist)
-        Button updatelist;
+//        @Optional
+//        @InjectView(R.id.showlist)
+//        Button showlist;
+//
+//        @Optional
+//        @InjectView(R.id.updatelist)
+//        Button updatelist;
 
         public void updatelist() {
 
@@ -188,9 +188,9 @@ public class MainActivity extends ActionBarActivity
         @InjectView(R.id.history)
         TextView history;
 
-        @Optional
-        @InjectView(R.id.alarmlog)
-        TextView alarmlog;
+//        @Optional
+//        @InjectView(R.id.alarmlog)
+//        TextView alarmlog;
 
         @Optional
         @InjectView(R.id.stop)
@@ -364,11 +364,13 @@ public class MainActivity extends ActionBarActivity
         private StringBuffer appendhistory;
         private Toast mToast;
 
+
         private void initAlarmEvent() {
             Intent intent = new Intent(getActivity(), RepeatingAlarm.class);
             am = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
-            sender = PendingIntent.getBroadcast(getActivity(), 0,
-                    intent, 0);
+//            sender = PendingIntent.getBroadcast(getActivity(), AlarmManager.RTC_WAKEUP, intent, 0);
+//            sender = PendingIntent.getBroadcast(getActivity(), AlarmManager.RTC_WAKEUP, intent, 0);
+            sender = PendingIntent.getBroadcast(getActivity(), AbnormalInfo.ALARMTYPE, intent, 0);
             managerAdapter = new AlarmManagerAdapter((AlarmManager) getActivity().getSystemService(ALARM_SERVICE), getActivity());
             clear();
         }
@@ -458,7 +460,8 @@ public class MainActivity extends ActionBarActivity
                 case 4:
                     AsyncTaskThreadPoolExecutorHelper.execute(new AsyncTask<Object, Object, Object>() {
                         String wakelockinfo = "";
-//adb logcat -s "mywakelock"
+
+                        //adb logcat -s "mywakelock"
                         @Override
                         protected Object doInBackground(Object... objects) {
                             wakelockinfo = getWakelockInfo();
@@ -519,31 +522,31 @@ public class MainActivity extends ActionBarActivity
                     break;
 
                 case R.id.showlist:
-                    updateTextView(managerAdapter.getAlarmStatus());
+//                    updateTextView(managerAdapter.getAlarmStatus());
                     break;
                 case R.id.updatelist:
                     HashMap<String, Integer> map = new HashMap<String, Integer>();
-                    map.put("com.example.myapp5", AlarmManagerAdapter.POLICY_FORBIDDEN);
+                    map.put("com.lenovo.powertester.app", AlarmManagerAdapter.POLICY_FORBIDDEN);
                     managerAdapter.updateAlarmList(map);
-                    updateTextView(managerAdapter.getAlarmStatus());
+//                    updateTextView(managerAdapter.getAlarmStatus());
                     break;
                 case R.id.enablelist:
                     HashMap<String, Integer> map2 = new HashMap<String, Integer>();
-                    map2.put("com.example.myapp5", AlarmManagerAdapter.POLICY_TRUSTED);
+                    map2.put("com.lenovo.powertester.app", AlarmManagerAdapter.POLICY_TRUSTED);
                     managerAdapter.updateAlarmList(map2);
-                    updateTextView(managerAdapter.getAlarmStatus());
+//                    updateTextView(managerAdapter.getAlarmStatus());
                     break;
                 default:
                     break;
             }
         }
 
-        private void updateTextView(HashMap<String, AbnormalInfo> alarmStatus) {
-            if (alarmStatus == null) {
-                return;
-            }
-            alarmlog.setText(Arrays.toString(alarmStatus.entrySet().toArray()));
-        }
+//        private void updateTextView(HashMap<String, AbnormalInfo> alarmStatus) {
+//            if (alarmStatus == null) {
+//                return;
+//            }
+//            alarmlog.setText(Arrays.toString(alarmStatus.entrySet().toArray()));
+//        }
 
         private static final int BUFFER_SIZE = 24;
         private static final String CMD_CAT = "/system/bin/cat";
