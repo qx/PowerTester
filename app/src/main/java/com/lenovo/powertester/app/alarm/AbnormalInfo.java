@@ -8,7 +8,7 @@ import java.util.Arrays;
  * Created by Administrator on 2014/5/15.
  */
 public class AbnormalInfo {
-    public static final int ALARMTYPE = AlarmManager.ELAPSED_REALTIME;
+    public static final int ALARMTYPE = AlarmManager.RTC;
     private String appNameFromPkgName;
     private int[] anInts;
 

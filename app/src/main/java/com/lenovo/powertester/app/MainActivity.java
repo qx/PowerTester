@@ -599,6 +599,8 @@ public class MainActivity extends ActionBarActivity
         public static final String BRIGHTNESS_PATH_SAMSUNG2 = "/sys/class/backlight/pwm-backlight/brightness";
         public static final String BRIGHTNESS_PATH_SAMSUNG3 = "/sys/class/backlight/s6e8aa0/brightness";
         public static final String BRIGHTNESS_PATH_INTEL = "/sys/class/backlight/psb-bl/brightness";
+        public static final String BRIGHTNESS_PATH_INTEL_PAD = "/sys/class/backlight/intel_backlight/brightness";
+
 
         private String getSysBrightnessPath() {
             File sysFile = new File(ComUtils.convertObsolutePath(BRIGHTNESS_PATH_GERNERIC));
@@ -620,6 +622,10 @@ public class MainActivity extends ActionBarActivity
             sysFile = new File(ComUtils.convertObsolutePath(BRIGHTNESS_PATH_INTEL));
             if (sysFile.exists()) {
                 return BRIGHTNESS_PATH_INTEL;
+            }
+            sysFile = new File(ComUtils.convertObsolutePath(BRIGHTNESS_PATH_INTEL_PAD));
+            if (sysFile.exists()) {
+                return BRIGHTNESS_PATH_INTEL_PAD;
             }
             return "";
         }
